@@ -27,18 +27,19 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3
 
-      - name: cd terraform folder
-        run: cd ./infrastracture/
-
       - name: Terraform Init
         run: terraform init
+        working-directory: infrastracture
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: infrastracture
 
       - name: Terraform Format
         run: terraform fmt
+        working-directory: infrastracture
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: infrastracture
 
