@@ -42,6 +42,7 @@ jobs:
         uses: actions-js/push@v1.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
 
       - name: Terraform Plan
         run: terraform plan
