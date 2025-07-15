@@ -29,17 +29,17 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: infrastracture
+        working-directory: infrastructure
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: infrastracture
+        working-directory: infrastructure
 
       - name: Terraform Format
         run: terraform fmt
-        working-directory: infrastracture
+        working-directory: infrastructure
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: infrastracture
+        working-directory: infrastructure
 
