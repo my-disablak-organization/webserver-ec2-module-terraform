@@ -1,7 +1,10 @@
-name: Deploy
+name: Check and Test
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ "main", "feature" ]
+  pull_request:
+    branches: [ "main", "feature" ]
 
 jobs:
   build:
@@ -24,6 +27,14 @@ jobs:
         run: terraform init
         working-directory: infrastructure
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: infrastructure
+
+      - name: Terraform Format
+        run: terraform fmt
+        working-directory: infrastructure
+
+      - name: Terraform Plan
+        run: terraform plan
         working-directory: infrastructure
