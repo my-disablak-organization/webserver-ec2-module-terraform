@@ -1,11 +1,6 @@
-name: Terraform CI
+name: Destroy infrastructure
 
 on:
-  push:
-    branches: [ "main", "feature" ]
-  pull_request:
-    branches: [ "main", "feature" ]
-
   workflow_dispatch:
 
 jobs:
@@ -29,19 +24,6 @@ jobs:
         run: terraform init
         working-directory: infrastructure
 
-      - name: Terraform Validate
-        run: terraform validate
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
         working-directory: infrastructure
-
-      - name: Terraform Format
-        run: terraform fmt
-        working-directory: infrastructure
-
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: infrastructure
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: infrastructure
-        if: github.event_name == 'workflow_dispatch'
