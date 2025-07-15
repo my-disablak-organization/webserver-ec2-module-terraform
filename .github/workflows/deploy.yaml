@@ -27,6 +27,9 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3
 
+      - name: cd terraform folder
+        run: cd ./infrastracture/
+
       - name: Terraform Init
         run: terraform init
 
