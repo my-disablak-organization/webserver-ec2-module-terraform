@@ -30,7 +30,7 @@ jobs:
         run: terraform init
         working-directory: infrastructure
 
-      - name: tfsec action
+      - name: Install and run tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: infrastructure
@@ -49,15 +49,8 @@ jobs:
         working-directory: infrastructure
 
       - name: Terraform Format
-        run: terraform fmt
+        run: terraform fmt -check
         working-directory: infrastructure
-
-      - name: Commit & Push formatted changes
-        uses: actions-js/push@v1.5
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
-          message: "Auto format changes"
 
       - name: Terraform Plan
         run: terraform plan
