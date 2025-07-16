@@ -32,7 +32,8 @@ jobs:
 
       - name: tfsec action
         uses: aquasecurity/tfsec-action@v1.0.3
-        working-directory: infrastructure
+        with:
+          working_directory: infrastructure
 
       - name: Install tflint
         uses: terraform-linters/setup-tflint@v4
