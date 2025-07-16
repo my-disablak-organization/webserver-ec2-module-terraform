@@ -27,11 +27,12 @@ func TestTerraform(t *testing.T) {
 func CheckEc2Instances(t *testing.T, terraformOptions *terraform.Options){
 	instanceHttpIDs := terraform.OutputList(t, terraformOptions, "instance_http_ids")
 	instanceDbIDs := terraform.OutputList(t, terraformOptions, "instance_db_ids")
+	vpcId := terraform.Output(t, terraformOptions, "vpc_id")
 	totalCount := len(instanceHttpIDs) + len(instanceDbIDs)
 
-	// add filter by name
 	filters := map[string][]string{
 		"instance-state-name": {"running"},
+		"vpc-id": {vpcId},
 	}
 
 	ids := terratestAws.GetEc2InstanceIdsByFilters(t, awsRegion, filters)
@@ -57,7 +58,7 @@ func CheckIsDbNotAccessable(t *testing.T, terraformOptions *terraform.Options){
 	for key, value := range publicIps {
 		fmt.Printf("Key: %s, Value: %s\n", key, value)
 		if value != "" {
-			ipsCount += 1
+			ipsCount++
 		}
 	}
 
