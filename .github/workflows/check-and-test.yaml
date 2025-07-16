@@ -30,6 +30,17 @@ jobs:
         run: terraform init
         working-directory: infrastructure
 
+      - name: tfsec action
+        uses: aquasecurity/tfsec-action@v1.0.3
+        working-directory: infrastructure
+
+      - name: Install tflint
+        uses: terraform-linters/setup-tflint@v4
+
+      - name: Run tflint
+        run: tflint -f compact
+        working-directory: infrastructure
+
       - name: Terraform Validate
         run: terraform validate
         working-directory: infrastructure
