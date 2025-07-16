@@ -2,9 +2,9 @@ name: Check and Test
 
 on:
   push:
-    branches: [ "main", "feature" ]
+    branches: [ "main", "feature", "week11task2" ]
   pull_request:
-    branches: [ "main", "feature" ]
+    branches: [ "main", "feature", "week11task2" ]
 
 permissions:
   contents: write
