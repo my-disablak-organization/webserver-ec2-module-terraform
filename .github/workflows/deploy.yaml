@@ -20,28 +20,28 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ AWS_REGION }}
+          aws-region: $AWS_REGION
 
       - name: Install Terrafrom
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ${{ WORK_DIR }}
+        working-directory: $WORK_DIR
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ${{ WORK_DIR }}
+        working-directory: $WORK_DIR
 
       - name: Setup Go environment
         uses: actions/setup-go@v5.5.0
       
       - name: Download Go Modules
         run: go mod download
-        working-directory: ${{ WORK_DIR_FOR_TEST }}
+        working-directory: $WORK_DIR_FOR_TEST
 
       - name: Run Go Tests
-        working-directory: ${{ WORK_DIR_FOR_TEST }}
+        working-directory: $WORK_DIR_FOR_TEST
         run: go test -v
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
