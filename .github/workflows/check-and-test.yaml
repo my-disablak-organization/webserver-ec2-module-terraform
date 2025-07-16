@@ -5,6 +5,7 @@ on:
     branches: [ "main", "feature", "week11task2" ]
   pull_request:
     branches: [ "main", "feature", "week11task2" ]
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
