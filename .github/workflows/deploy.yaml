@@ -30,7 +30,7 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply tfplan -auto-approve
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment

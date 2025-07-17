@@ -55,5 +55,12 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=tfplan
         working-directory: ${{ env.WORK_DIR }}
+
+      - name: Commit & Push TF plan
+        uses: actions-js/push@v1.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
+          message: "tfplan changed"
