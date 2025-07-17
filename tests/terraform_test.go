@@ -16,9 +16,6 @@ func TestTerraform(t *testing.T) {
     TerraformDir: "../infrastructure",
   })
 
-//   defer terraform.Destroy(t, terraformOptions)
-//   terraform.InitAndApply(t, terraformOptions)
-
   CheckEc2Instances(t, terraformOptions)
   CheckCidrs(t, terraformOptions)
   CheckIsDbNotAccessable(t, terraformOptions)
