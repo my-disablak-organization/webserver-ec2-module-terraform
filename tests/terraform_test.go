@@ -1,24 +1,26 @@
 package test
 
 import (
-  "fmt"
-  "testing"
+	"fmt"
+	"net"
+	"testing"
+	"time"
 
-  terratestAws "github.com/gruntwork-io/terratest/modules/aws"
-  "github.com/gruntwork-io/terratest/modules/terraform"
-  "github.com/stretchr/testify/assert"
+	terratestAws "github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
 var awsRegion string = "us-east-1"
 
 func TestTerraform(t *testing.T) {
-  terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-    TerraformDir: "../infrastructure",
-  })
+	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		TerraformDir: "../infrastructure",
+	})
 
-  CheckEc2Instances(t, terraformOptions)
-  CheckCidrs(t, terraformOptions)
-  CheckIsDbNotAccessable(t, terraformOptions)
+	CheckEc2Instances(t, terraformOptions)
+	CheckCidrs(t, terraformOptions)
+	CheckDbNotAccessable(t, terraformOptions)
 }
 
 func CheckEc2Instances(t *testing.T, terraformOptions *terraform.Options){
@@ -47,7 +49,7 @@ func CheckCidrs(t *testing.T, terraformOptions *terraform.Options){
 	assert.Equal(t, "192.168.2.0/24", subnetDbCird)
 }
 
-func CheckIsDbNotAccessable(t *testing.T, terraformOptions *terraform.Options){
+func CheckDbNotAccessable(t *testing.T, terraformOptions *terraform.Options){
 	instanceIDs := terraform.OutputList(t, terraformOptions, "instance_db_ids")
 	publicIps := terratestAws.GetPublicIpsOfEc2Instances(t, instanceIDs, awsRegion)
 
@@ -59,5 +61,23 @@ func CheckIsDbNotAccessable(t *testing.T, terraformOptions *terraform.Options){
 		}
 	}
 
-	assert.Equal(t, 0, ipsCount)
+	noPublicIps := 0 == ipsCount
+	assert.Equal(t, true, noPublicIps)
+	
+	if noPublicIps{
+		return
+	}
+
+	// Check connection to MySQL
+	timeout := 5 * time.Second
+	for name, ip := range publicIps{
+		address := fmt.Sprintf("%s:3306", ip)
+		
+		conn, err := net.DialTimeout("tcp", address, timeout)
+		if conn != nil {
+			conn.Close()
+		}
+
+		assert.Error(t, err, "Instance %s is accessible at %s!", name, address)
+	}
 }
