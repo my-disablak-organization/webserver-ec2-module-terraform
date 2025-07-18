@@ -1,5 +1,15 @@
 # parms file for aws ec2 cloud
 
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "administrator_ip" {
+  type    = string
+  default = "141.138.97.234/32"
+}
+
 #### VPC Network
 variable "vpc_cidr" {
   type    = string

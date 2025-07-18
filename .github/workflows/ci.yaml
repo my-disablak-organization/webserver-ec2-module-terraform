@@ -37,7 +37,6 @@ jobs:
         with:
           working_directory: infrastructure
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          soft_fail: true # for test
 
       - name: Install tflint
         uses: terraform-linters/setup-tflint@v4
