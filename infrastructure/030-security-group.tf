@@ -43,7 +43,6 @@ resource "aws_security_group" "web" {
     Name = "web"
   }
 
-  # http port
   ingress {
     from_port   = 80
     to_port     = 80
@@ -52,7 +51,6 @@ resource "aws_security_group" "web" {
     description = "Allow HTTP"
   }
 
-  # https port
   ingress {
     from_port   = 443
     to_port     = 443
@@ -61,7 +59,6 @@ resource "aws_security_group" "web" {
     description = "Allow HTTPS"
   }
 
-  # Open access to public network
   egress {
     from_port   = 0
     to_port     = 0
@@ -80,7 +77,6 @@ resource "aws_security_group" "db" {
     Name = "db"
   }
 
-  # db port
   ingress {
     from_port   = 3306
     to_port     = 3306
