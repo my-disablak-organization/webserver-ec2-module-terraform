@@ -36,9 +36,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init \
-          -backend-config="backend/{{ env.TF_ENV }}.hcl" \
-          -reconfigure
+        run: |
+          terraform init \
+            -backend-config="backend/{{ env.TF_ENV }}.hcl" \
+            -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
       # - name: Require file
@@ -49,10 +50,11 @@ jobs:
       #     fi
 
       - name: Terraform Apply
-        run: terraform apply \
-          --auto-approve \
-          -var-file="vars/${{ env.TF_ENV }}.tfvars"
-          plans/${{ env.TF_ENV }}.tfplan
+        run: |
+          terraform apply \
+            --auto-approve \
+            -var-file="vars/${{ env.TF_ENV }}.tfvars"
+            plans/${{ env.TF_ENV }}.tfplan
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment
