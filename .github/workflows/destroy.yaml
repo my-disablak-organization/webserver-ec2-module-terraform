@@ -33,6 +33,8 @@ jobs:
 
       - name: Install Terrafrom
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
 
       - name: Terraform Init
         run: |
