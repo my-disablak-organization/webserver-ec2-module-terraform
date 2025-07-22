@@ -22,7 +22,7 @@ concurrency: one-deploy-at-a-time
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
-  TF_ENV: ${{ github.event.inputs.environment || 'dev' }}
+  TF_ENV: ${{ github.event.inputs.environment || github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/dev' && 'dev' || 'dev' }}
 
 jobs:
   build:
@@ -42,7 +42,9 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+          -backend-config="backend/{{ env.TF_ENV }}.hcl" \
+          -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Install and run tfsec
@@ -69,8 +71,8 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform plan \
-            -var-file="${{ env.TF_ENV }}.tfvars" \
-            -out=tfplan
+            -var-file="vars/${{ env.TF_ENV }}.tfvars" \
+            -out="plans/${{ env.TF_ENV }}.tfplan"
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Commit & Push TF plan

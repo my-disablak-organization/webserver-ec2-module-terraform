@@ -2,10 +2,20 @@ name: Destroy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev/prod)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
 
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
+  TF_ENV: ${{ github.event.inputs.environment }}
 
 jobs:
   build:
@@ -25,7 +35,9 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+          -backend-config="backend/{{ env.TF_ENV }}.hcl" \
+          -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Terraform Destroy

@@ -2,11 +2,21 @@ name: CD
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev/prod)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
 
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
   WORK_DIR_FOR_TEST: tests
+  TF_ENV: ${{ github.event.inputs.environment }}
 
 jobs:
   build:
@@ -26,11 +36,23 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+          -backend-config="backend/{{ env.TF_ENV }}.hcl" \
+          -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
+      # - name: Require file
+      #   run: |
+      #     if [ ! -f "secrets.env" ]; then
+      #       echo "Missing required file"
+      #       exit 1
+      #     fi
+
       - name: Terraform Apply
-        run: terraform apply --auto-approve tfplan
+        run: terraform apply \
+          --auto-approve \
+          -var-file="vars/${{ env.TF_ENV }}.tfvars"
+          plans/${{ env.TF_ENV }}.tfplan
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment
