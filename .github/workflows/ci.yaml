@@ -22,7 +22,7 @@ concurrency: one-deploy-at-a-time
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
-  TF_ENV: ${{ github.event.inputs.environment }}
+  TF_ENV: ${{ github.event.inputs.environment || 'dev' }}
 
 jobs:
   build:
@@ -70,7 +70,7 @@ jobs:
         run: |
           terraform plan \
             -out=tfplan
-#            -var-file="${{ env.TF_ENV }}.tfvars" \
+            -var-file="${{ env.TF_ENV }}.tfvars" \
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Commit & Push TF plan
