@@ -7,6 +7,7 @@ resource "aws_security_group" "administration" {
   vpc_id      = aws_vpc.terraform.id
   tags = {
     Name = "administration"
+    Environment = var.env
   }
 
   ingress {
@@ -41,6 +42,7 @@ resource "aws_security_group" "web" {
   vpc_id      = aws_vpc.terraform.id
   tags = {
     Name = "web"
+    Environment = var.env
   }
 
   ingress {
@@ -75,6 +77,7 @@ resource "aws_security_group" "db" {
   vpc_id      = aws_vpc.terraform.id
   tags = {
     Name = "db"
+    Environment = var.env
   }
 
   ingress {

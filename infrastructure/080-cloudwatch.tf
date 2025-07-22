@@ -6,8 +6,8 @@ resource "aws_cloudwatch_log_group" "vpc_logs" {
 }
 
 resource "aws_flow_log" "vpc_flow_logs" {
-  log_destination_type = "cloud-watch-logs" # or "s3"
-  traffic_type         = "ALL"              # ACCEPT, REJECT, or ALL
+  log_destination_type = "cloud-watch-logs"
+  traffic_type         = "ALL"
   vpc_id               = aws_vpc.terraform.id
 
   log_destination = aws_cloudwatch_log_group.vpc_logs.arn
@@ -15,5 +15,6 @@ resource "aws_flow_log" "vpc_flow_logs" {
 
   tags = {
     Name = "vpc-flow-logs"
+    Environment = var.env
   }
 }
