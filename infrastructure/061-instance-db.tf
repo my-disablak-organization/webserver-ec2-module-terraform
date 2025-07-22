@@ -26,7 +26,7 @@ resource "aws_instance" "db" {
   }
 
   tags = {
-    Name = each.key
+    Name        = each.key
     Environment = var.env
   }
 }

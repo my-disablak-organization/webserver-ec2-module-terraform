@@ -5,7 +5,7 @@ resource "aws_vpc" "terraform" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   tags = {
-    Name = "vpc-http"
+    Name        = "vpc-http"
     Environment = var.env
   }
 }
@@ -16,7 +16,7 @@ resource "aws_subnet" "http" {
   cidr_block        = var.network_http["cidr"]
   availability_zone = var.network_http["az"]
   tags = {
-    Name = "subnet-http"
+    Name        = "subnet-http"
     Environment = var.env
   }
   depends_on = [aws_internet_gateway.gw]
@@ -28,7 +28,7 @@ resource "aws_subnet" "db" {
   cidr_block        = var.network_db["cidr"]
   availability_zone = var.network_http["az"]
   tags = {
-    Name = "subnet-db"
+    Name        = "subnet-db"
     Environment = var.env
   }
   depends_on = [aws_internet_gateway.gw]
@@ -38,7 +38,7 @@ resource "aws_subnet" "db" {
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.terraform.id
   tags = {
-    Name = "internet-gateway"
+    Name        = "internet-gateway"
     Environment = var.env
   }
 }

@@ -6,7 +6,7 @@ resource "aws_security_group" "administration" {
   description = "Allow default administration service"
   vpc_id      = aws_vpc.terraform.id
   tags = {
-    Name = "administration"
+    Name        = "administration"
     Environment = var.env
   }
 
@@ -41,7 +41,7 @@ resource "aws_security_group" "web" {
   description = "Allow web incgress trafic"
   vpc_id      = aws_vpc.terraform.id
   tags = {
-    Name = "web"
+    Name        = "web"
     Environment = var.env
   }
 
@@ -76,7 +76,7 @@ resource "aws_security_group" "db" {
   description = "Allow db incgress trafic"
   vpc_id      = aws_vpc.terraform.id
   tags = {
-    Name = "db"
+    Name        = "db"
     Environment = var.env
   }
 
