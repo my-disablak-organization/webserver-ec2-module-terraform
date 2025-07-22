@@ -38,7 +38,7 @@ jobs:
       - name: Terraform Init
         run: |
           terraform init \
-            -backend-config="backend/{{ env.TF_ENV }}.hcl" \
+            -backend-config="backend/{env.TF_ENV}.hcl" \
             -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
@@ -53,8 +53,8 @@ jobs:
         run: |
           terraform apply \
             --auto-approve \
-            -var-file="vars/${{ env.TF_ENV }}.tfvars"
-            plans/${{ env.TF_ENV }}.tfplan
+            -var-file="vars/${env.TF_ENV}.tfvars"
+            plans/${env.TF_ENV}.tfplan
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment
