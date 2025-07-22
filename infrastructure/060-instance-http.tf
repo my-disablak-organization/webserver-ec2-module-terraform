@@ -27,6 +27,7 @@ resource "aws_instance" "http" {
 
   tags = {
     Name = each.key
+    Environment = var.env
   }
 }
 
@@ -38,6 +39,7 @@ resource "aws_eip" "public_http" {
   depends_on = [aws_internet_gateway.gw]
   tags = {
     Name = "public-http-${each.key}"
+    Environment = var.env
   }
 }
 

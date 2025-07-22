@@ -5,6 +5,11 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "env" {
+  type = string
+  default = "dev"
+}
+
 variable "administrator_ip" {
   type    = string
   default = "141.138.97.234/32"
