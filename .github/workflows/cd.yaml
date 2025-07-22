@@ -1,4 +1,4 @@
-name: Destroy
+name: CD
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
+  WORK_DIR_FOR_TEST: tests
 
 jobs:
   build:
@@ -28,6 +29,20 @@ jobs:
         run: terraform init
         working-directory: ${{ env.WORK_DIR }}
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Apply
+        run: terraform apply --auto-approve tfplan
         working-directory: ${{ env.WORK_DIR }}
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v5.5.0
+      
+      - name: Download Go Modules
+        run: go mod download
+        working-directory: ${{ env.WORK_DIR_FOR_TEST }}
+
+      - name: Run Go Tests
+        working-directory: ${{ env.WORK_DIR_FOR_TEST }}
+        run: go test -v
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
