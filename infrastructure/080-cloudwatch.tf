@@ -14,7 +14,7 @@ resource "aws_flow_log" "vpc_flow_logs" {
   iam_role_arn    = aws_iam_role.vpc_flow_logs_role.arn
 
   tags = {
-    Name = "vpc-flow-logs"
+    Name        = "vpc-flow-logs"
     Environment = var.env
   }
 }
