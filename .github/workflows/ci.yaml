@@ -22,7 +22,7 @@ concurrency: one-deploy-at-a-time
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
-  TF_ENV: ${{ github.event.inputs.environment || github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/dev' && 'dev' || 'dev' }}
+  TF_ENV: ${{ github.event.inputs.environment || github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
 
 jobs:
   build:
