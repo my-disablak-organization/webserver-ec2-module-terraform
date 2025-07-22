@@ -1,7 +1,7 @@
 # Here it needs KMS key to encrypt this log group
 #tfsec:ignore:aws-cloudwatch-log-group-customer-key
 resource "aws_cloudwatch_log_group" "vpc_logs" {
-  name              = "/vpc/flow-logs"
+  name              = "/vpc/flow-logs-${var.env}"
   retention_in_days = 14
 }
 

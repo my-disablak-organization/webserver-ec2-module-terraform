@@ -53,7 +53,7 @@ jobs:
         run: |
           terraform apply \
             --auto-approve \
-            -var-file="vars/${TF_ENV}.tfvars"
+            -var-file="vars/${TF_ENV}.tfvars" \
             plans/${TF_ENV}.tfplan
         working-directory: ${{ env.WORK_DIR }}
 

@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "vpc_flow_logs_role" {
-  name = "vpc-flow-logs-role"
+  name = "vpc-flow-logs-role-${var.env}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,7 +16,7 @@ resource "aws_iam_role" "vpc_flow_logs_role" {
 }
 
 resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
-  name = "vpc-flow-logs-policy"
+  name = "vpc-flow-logs-policy-${var.env}"
   role = aws_iam_role.vpc_flow_logs_role.id
 
   policy = jsonencode({
