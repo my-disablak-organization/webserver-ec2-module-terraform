@@ -2,14 +2,26 @@ name: CI
 
 on:
   push:
-    branches: [ "main", "feature", "week11task2" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "main", "feature", "week11task2" ]
+    branches: [ "*" ]
+  
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev/prod)'
+        required: true
+        #default: 'dev'
+        options:
+          - dev
+          - prod
+
+concurrency: one-deploy-at-a-time
 
 env:
   AWS_REGION: us-east-1
   WORK_DIR: infrastructure
+  TF_ENV: ${{ github.event.inputs.environment }}
 
 jobs:
   build:
@@ -54,7 +66,10 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: |
+          terraform plan \
+            -var-file="${{ env.TF_ENV }}.tfvars" \
+            -out=tfplan
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Commit & Push TF plan
