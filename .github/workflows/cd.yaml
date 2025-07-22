@@ -38,7 +38,7 @@ jobs:
       - name: Terraform Init
         run: |
           terraform init \
-            -backend-config="backend/{TF_ENV}.hcl" \
+            -backend-config="backend/${TF_ENV}.hcl" \
             -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
