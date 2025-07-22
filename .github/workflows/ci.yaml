@@ -69,8 +69,8 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform plan \
-            -out=tfplan
             -var-file="${{ env.TF_ENV }}.tfvars" \
+            -out=tfplan
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Commit & Push TF plan
