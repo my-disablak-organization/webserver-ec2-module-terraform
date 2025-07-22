@@ -12,6 +12,7 @@ on:
         description: 'Target environment (dev/prod)'
         required: true
         default: 'dev'
+        type: choice
         options:
           - dev
           - prod
