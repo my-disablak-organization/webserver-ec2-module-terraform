@@ -13,7 +13,7 @@ on:
           - prod
         
       use_saved_plan:
-        description: 'Use saved plan or generate new'
+        description: 'Use saved plan (Or generate new one)'
         required: true
         default: true
         type: boolean
@@ -50,21 +50,28 @@ jobs:
             -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.use_saved_plan == 'false' }}
+        run: |
+          terraform plan \
+            -var-file="vars/${TF_ENV}.tfvars" \
+            -out="plans/${TF_ENV}.tfplan"
+        working-directory: ${{ env.WORK_DIR }}
+
+      - name: Commit & Push TF plan
+        if: ${{ github.event.inputs.use_saved_plan == 'false' }}
+        uses: actions-js/push@v1.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
+          message: "tfplan changed" 
+
       - name: Terraform apply saved plan
-        if: ${{ github.event.inputs.use_saved_plan == 'true' }}
         run: |
           terraform apply \
             --auto-approve \
             -var-file="vars/${TF_ENV}.tfvars" \
             plans/${TF_ENV}.tfplan
-        working-directory: ${{ env.WORK_DIR }}
-
-      - name: Terraform apply
-        if: ${{ github.event.inputs.use_saved_plan == 'false' }}
-        run: |
-          terraform apply \
-            --auto-approve \
-            -var-file="vars/${TF_ENV}.tfvars"
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment
