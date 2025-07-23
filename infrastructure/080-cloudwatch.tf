@@ -3,6 +3,10 @@
 resource "aws_cloudwatch_log_group" "vpc_logs" {
   name              = "/vpc/flow-logs-${var.env}"
   retention_in_days = 14
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_flow_log" "vpc_flow_logs" {
