@@ -11,6 +11,12 @@ on:
         options:
           - dev
           - prod
+        
+      use_saved_plan:
+        description: 'Use saved plan or generate new'
+        required: true
+        default: true
+        type: boolean
 
 env:
   AWS_REGION: us-east-1
@@ -44,19 +50,21 @@ jobs:
             -reconfigure
         working-directory: ${{ env.WORK_DIR }}
 
-      # - name: Require file
-      #   run: |
-      #     if [ ! -f "secrets.env" ]; then
-      #       echo "Missing required file"
-      #       exit 1
-      #     fi
-
-      - name: Terraform Apply
+      - name: Terraform apply saved plan
+        if: ${{ github.event.inputs.use_saved_plan == 'true' }}
         run: |
           terraform apply \
             --auto-approve \
             -var-file="vars/${TF_ENV}.tfvars" \
             plans/${TF_ENV}.tfplan
+        working-directory: ${{ env.WORK_DIR }}
+
+      - name: Terraform apply
+        if: ${{ github.event.inputs.use_saved_plan == 'false' }}
+        run: |
+          terraform apply \
+            --auto-approve \
+            -var-file="vars/${TF_ENV}.tfvars"
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Setup Go environment
