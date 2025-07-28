@@ -11,7 +11,7 @@ module "github-runner" {
   subnet_ids = module.vpc.private_subnets
 
   github_app = {
-    key_base64     = filebase64("./my-org-runner.2025-07-25.private-key.pem")
+    key_base64     = filebase64(var.path_to_private_key)
     id             = var.github_app.id
     webhook_secret = random_id.random.hex
   }
@@ -25,7 +25,7 @@ module "github-runner" {
   enable_organization_runners = true
   enable_ssm_on_runners = true
 
-  instance_types = ["t3.small"]
+  instance_types = [var.instance_type]
 
   enable_ephemeral_runners = true
   enable_job_queued_check = true
@@ -39,13 +39,12 @@ module "github-runner" {
     enable = false
   }
 
-
   ami = {
     filter = {
-      name   = ["github-runner-al2023-x86_64-202507271355"]
+      name   = [var.ami_filter_info.name]
       state  = ["available"]
     }
-    owners = ["104280348236"]
+    owners = [var.ami_filter_info.owner]
   }
 
   enable_userdata = false
